@@ -1,4 +1,4 @@
-name: tests_for_demo_java
+name: CalcTestJava
 
 env:
   TESTOPS_ENDPOINT: https://demo.qatools.cloud/
