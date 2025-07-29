@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CalcTest {
 
     @DisplayName("Проверка операции сложения")
-    @ParameterizedTest(name = "Проверка операции сложения — входные данные: {0}")
+    @ParameterizedTest(name = "Проверка операции сложения")
     @ValueSource(strings = {"1,9,10", "2,8,10", "3,two,5"})
     public void testAddition(String input) {
         Allure.step("Парсим входные данные: " + input, () -> {
@@ -46,7 +46,7 @@ public class CalcTest {
     }
 
     @DisplayName("Проверка операции вычитания")
-    @ParameterizedTest(name = "Проверка операции вычитания — входные данные: {0}")
+    @ParameterizedTest(name = "Проверка операции вычитания")
     @ValueSource(strings = {"9,1,8", "8,2,6", "7,two,5"})
     public void testSubtraction(String input) {
         Allure.step("Парсим входные данные: " + input, () -> {
@@ -69,7 +69,7 @@ public class CalcTest {
     }
 
     @DisplayName("Проверка операции умножения")
-    @ParameterizedTest(name = "Проверка операции умножения — входные данные: {0}")
+    @ParameterizedTest(name = "Проверка операции умножения")
     @ValueSource(strings = {"0,10,0", "8,2,16", "7,two,14"})
     public void testMultiplication(String input) {
         Allure.step("Парсим входные данные: " + input, () -> {
@@ -92,7 +92,7 @@ public class CalcTest {
     }
 
     @DisplayName("Проверка операции деления")
-    @ParameterizedTest(name = "Проверка операции деления — входные данные: {0}")
+    @ParameterizedTest(name = "Проверка операции деления")
     @ValueSource(strings = {"10,0,0", "8,2,4", "14,two,2"})
     public void testDivision(String input) {
         Allure.step("Парсим входные данные: " + input, () -> {
