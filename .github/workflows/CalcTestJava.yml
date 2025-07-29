@@ -68,12 +68,14 @@ jobs:
       - name: Run tests and report to TestOps
         run: |
           allurectl watch -- mvn clean test -Dallure.results.directory=$RESULTS
+        env:
+          ALLURE_RESULTS: $RESULTS
 
       - name: List results
         if: always()
         run: ls -la $RESULTS
 
-      - name: Upload allure results to TestOps manually
-        if: always()
-        run: |
-          allurectl upload $RESULTS
+      #- name: Upload allure results to TestOps manually
+      #  if: always()
+      #  run: |
+      #    allurectl upload $RESULTS
