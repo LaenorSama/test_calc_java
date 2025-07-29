@@ -69,8 +69,6 @@ jobs:
         run: |
           allurectl watch -- mvn clean test -Dallure.results.directory=$RESULTS
         continue-on-error: true
-        env:
-          ALLURE_RESULTS: $RESULTS
 
       - name: List results
         if: always()
