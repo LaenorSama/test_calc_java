@@ -76,4 +76,4 @@ jobs:
       - name: Upload allure results to TestOps manually
         if: always()
         run: |
-          allurectl upload --results $RESULTS
+          allurectl upload $RESULTS
