@@ -1,0 +1,32 @@
+# Java class files
+*.class
+
+# Maven target directory
+target/
+
+# IntelliJ IDEA project files
+.idea/
+*.iml
+*.iws
+out/
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Allure results and reports
+allure-results/
+allure-report/
+
+# Environment/secret files
+.env
+*.key
+*.pem
+
+# VSCode (если вдруг используешь)
+.vscode/
