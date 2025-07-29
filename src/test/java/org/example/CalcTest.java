@@ -1,8 +1,10 @@
 package org.example;
 
-import io.qameta.allure.*;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -15,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Epic("Тестирование калькулятора")
 @Feature("Арифметические операции")
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CalcTest {
 
     private static final Class<?>[] ERROR_TYPES = {
@@ -27,56 +28,32 @@ public class CalcTest {
 
     private final Random random = new Random();
 
-    @ParameterizedTest(name = "{displayName}")
+    private record CalcCase(String aStr, String bStr, double expected) {}
+
+    enum Operation {
+        ADDITION("сложение"),
+        SUBTRACTION("вычитание"),
+        MULTIPLICATION("умножение"),
+        DIVISION("деление");
+
+        private final String name;
+        Operation(String name) { this.name = name; }
+        public String getName() { return name; }
+    }
+
+    @ParameterizedTest(name = "Проверка операции сложения")
     @ValueSource(strings = {
             "1,9,10",
             "2,8,10",
-            "3,two,5"  // всегда падает
+            "3,two,5" // всегда падает
     })
     @Description("Этот тест проверяет операцию сложения.")
     @DisplayName("Проверка операции сложения")
-    void testAddition(String input) throws IOException {
-        attachLogo();
-
-        String[] parts = input.split(",");
-        String aStr = parts[0];
-        String bStr = parts[1];
-        double expected;
-        try {
-            expected = Double.parseDouble(parts[2]);
-        } catch (NumberFormatException e) {
-            fail("Неверное значение expected: " + parts[2]);
-            return;
-        }
-
-        Calc calc = new Calc();
-        assertEquals(0, calc.getResult(), "Начальное значение должно быть 0");
-
-        try {
-            Allure.step("Парсим операнды", () -> {
-                double a = parseOperand(aStr);
-                double b = parseOperand(bStr);
-
-                Allure.step(String.format("Добавляем %s + %s", a, b), () -> {
-                    if (random.nextDouble() < 0.95) {
-                        calc.addition(a, b);
-                    }
-                });
-            });
-
-            Allure.step("Проверяем результат", () -> {
-                Allure.addAttachment("Результат", String.format("Сложение %s + %s = %s", aStr, bStr, calc.getResult()));
-                assertEquals(expected, calc.getResult(), 0.0001);
-            });
-
-            Allure.step("Выполняем случайную ошибку (если повезет)", this::maybeThrowRandomError);
-
-        } catch (Exception e) {
-            fail("Ошибка во время выполнения: " + e.getMessage(), e);
-        }
+    void testAddition(String csv) throws IOException {
+        runTest(parseCase(csv), Operation.ADDITION);
     }
 
-    @ParameterizedTest(name = "{displayName}")
+    @ParameterizedTest(name = "Проверка операции вычитания")
     @ValueSource(strings = {
             "9,1,8",
             "8,2,6",
@@ -84,48 +61,11 @@ public class CalcTest {
     })
     @Description("Этот тест проверяет операцию вычитания.")
     @DisplayName("Проверка операции вычитания")
-    void testSubtraction(String input) throws IOException {
-        attachLogo();
-
-        String[] parts = input.split(",");
-        String aStr = parts[0];
-        String bStr = parts[1];
-        double expected;
-        try {
-            expected = Double.parseDouble(parts[2]);
-        } catch (NumberFormatException e) {
-            fail("Неверное значение expected: " + parts[2]);
-            return;
-        }
-
-        Calc calc = new Calc();
-        assertEquals(0, calc.getResult());
-
-        try {
-            Allure.step("Парсим операнды", () -> {
-                double a = parseOperand(aStr);
-                double b = parseOperand(bStr);
-
-                Allure.step(String.format("Вычитаем %s - %s", a, b), () -> {
-                    if (random.nextDouble() < 0.95) {
-                        calc.subtraction(a, b);
-                    }
-                });
-            });
-
-            Allure.step("Проверяем результат", () -> {
-                Allure.addAttachment("Результат", String.format("Вычитание %s - %s = %s", aStr, bStr, calc.getResult()));
-                assertEquals(expected, calc.getResult(), 0.0001);
-            });
-
-            Allure.step("Выполняем случайную ошибку (если повезет)", this::maybeThrowRandomError);
-
-        } catch (Exception e) {
-            fail("Ошибка во время выполнения: " + e.getMessage(), e);
-        }
+    void testSubtraction(String csv) throws IOException {
+        runTest(parseCase(csv), Operation.SUBTRACTION);
     }
 
-    @ParameterizedTest(name = "{displayName}")
+    @ParameterizedTest(name = "Проверка операции умножения")
     @ValueSource(strings = {
             "0,10,0",
             "8,2,16",
@@ -133,48 +73,11 @@ public class CalcTest {
     })
     @Description("Этот тест проверяет операцию умножения.")
     @DisplayName("Проверка операции умножения")
-    void testMultiplication(String input) throws IOException {
-        attachLogo();
-
-        String[] parts = input.split(",");
-        String aStr = parts[0];
-        String bStr = parts[1];
-        double expected;
-        try {
-            expected = Double.parseDouble(parts[2]);
-        } catch (NumberFormatException e) {
-            fail("Неверное значение expected: " + parts[2]);
-            return;
-        }
-
-        Calc calc = new Calc();
-        assertEquals(0, calc.getResult());
-
-        try {
-            Allure.step("Парсим операнды", () -> {
-                double a = parseOperand(aStr);
-                double b = parseOperand(bStr);
-
-                Allure.step(String.format("Умножаем %s * %s", a, b), () -> {
-                    if (random.nextDouble() < 0.95) {
-                        calc.multiplication(a, b);
-                    }
-                });
-            });
-
-            Allure.step("Проверяем результат", () -> {
-                Allure.addAttachment("Результат", String.format("Умножение %s * %s = %s", aStr, bStr, calc.getResult()));
-                assertEquals(expected, calc.getResult(), 0.0001);
-            });
-
-            Allure.step("Выполняем случайную ошибку (если повезет)", this::maybeThrowRandomError);
-
-        } catch (Exception e) {
-            fail("Ошибка во время выполнения: " + e.getMessage(), e);
-        }
+    void testMultiplication(String csv) throws IOException {
+        runTest(parseCase(csv), Operation.MULTIPLICATION);
     }
 
-    @ParameterizedTest(name = "{displayName}")
+    @ParameterizedTest(name = "Проверка операции деления")
     @ValueSource(strings = {
             "10,0,0",
             "8,2,4",
@@ -182,41 +85,47 @@ public class CalcTest {
     })
     @Description("Этот тест проверяет операцию деления.")
     @DisplayName("Проверка операции деления")
-    void testDivision(String input) throws IOException {
+    void testDivision(String csv) throws IOException {
+        runTest(parseCase(csv), Operation.DIVISION);
+    }
+
+    private CalcCase parseCase(String csv) {
+        String[] parts = csv.split(",");
+        return new CalcCase(parts[0], parts[1], Double.parseDouble(parts[2]));
+    }
+
+    private void runTest(CalcCase testCase, Operation operation) throws IOException {
         attachLogo();
 
-        String[] parts = input.split(",");
-        String aStr = parts[0];
-        String bStr = parts[1];
-        double expected;
-        try {
-            expected = Double.parseDouble(parts[2]);
-        } catch (NumberFormatException e) {
-            fail("Неверное значение expected: " + parts[2]);
-            return;
-        }
+        Allure.parameter("a", testCase.aStr);
+        Allure.parameter("b", testCase.bStr);
+        Allure.parameter("expected", String.valueOf(testCase.expected));
 
         Calc calc = new Calc();
-        assertEquals(0, calc.getResult());
+        assertEquals(0, calc.getResult(), "Начальное значение должно быть 0");
 
         try {
-            Allure.step("Парсим операнды", () -> {
-                double a = parseOperand(aStr);
-                double b = parseOperand(bStr);
+            if (random.nextDouble() < 0.95) {
+                double a = parseOperand(testCase.aStr);
+                double b = parseOperand(testCase.bStr);
 
-                Allure.step(String.format("Делим %s / %s", a, b), () -> {
-                    if (random.nextDouble() < 0.95) {
-                        calc.division(a, b);
-                    }
-                });
-            });
+                switch (operation) {
+                    case ADDITION -> calc.addition(a, b);
+                    case SUBTRACTION -> calc.subtraction(a, b);
+                    case MULTIPLICATION -> calc.multiplication(a, b);
+                    case DIVISION -> calc.division(a, b);
+                }
+            }
 
-            Allure.step("Проверяем результат", () -> {
-                Allure.addAttachment("Результат", String.format("Деление %s / %s = %s", aStr, bStr, calc.getResult()));
-                assertEquals(expected, calc.getResult(), 0.0001);
-            });
+            Allure.step(String.format("Выполнена операция %s: %s и %s, ожидаемый результат: %s",
+                    operation.getName(), testCase.aStr, testCase.bStr, testCase.expected));
 
-            Allure.step("Выполняем случайную ошибку (если повезет)", this::maybeThrowRandomError);
+            Allure.addAttachment("Результат", String.format("%s %s %s = %s",
+                    operation.getName(), testCase.aStr, testCase.bStr, calc.getResult()));
+
+            assertEquals(testCase.expected, calc.getResult(), 0.0001);
+
+            maybeThrowRandomError();
 
         } catch (Exception e) {
             fail("Ошибка во время выполнения: " + e.getMessage(), e);
