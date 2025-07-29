@@ -48,7 +48,6 @@ public class CalcTest {
             "3,two,5" // всегда падает
     })
     @Description("Этот тест проверяет операцию сложения.")
-    @DisplayName("Проверка операции сложения")
     void testAddition(String csv) throws IOException {
         runTest(parseCase(csv), Operation.ADDITION);
     }
@@ -60,7 +59,6 @@ public class CalcTest {
             "7,two,5"
     })
     @Description("Этот тест проверяет операцию вычитания.")
-    @DisplayName("Проверка операции вычитания")
     void testSubtraction(String csv) throws IOException {
         runTest(parseCase(csv), Operation.SUBTRACTION);
     }
@@ -72,7 +70,6 @@ public class CalcTest {
             "7,two,14"
     })
     @Description("Этот тест проверяет операцию умножения.")
-    @DisplayName("Проверка операции умножения")
     void testMultiplication(String csv) throws IOException {
         runTest(parseCase(csv), Operation.MULTIPLICATION);
     }
@@ -84,7 +81,6 @@ public class CalcTest {
             "14,two,2"
     })
     @Description("Этот тест проверяет операцию деления.")
-    @DisplayName("Проверка операции деления")
     void testDivision(String csv) throws IOException {
         runTest(parseCase(csv), Operation.DIVISION);
     }
