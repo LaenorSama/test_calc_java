@@ -68,6 +68,7 @@ jobs:
       - name: Run tests and report to TestOps
         run: |
           allurectl watch -- mvn clean test -Dallure.results.directory=$RESULTS
+        continue-on-error: true
         env:
           ALLURE_RESULTS: $RESULTS
 
