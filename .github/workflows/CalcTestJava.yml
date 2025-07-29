@@ -5,7 +5,7 @@ env:
   TESTOPS_PROJECT_ID: 166
   TESTOPS_TOKEN: ${{ secrets.TESTOPS_TOKEN }}
   ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
-  RESULTS: "allure-results"
+  RESULTS: "target/allure-results"
   BROWSER: ${{ inputs.BROWSER || 'OperaGX' }}
   OS: ${{ inputs.OS || 'Win_11' }}
   BRANCH: ${{ github.ref_name }}
@@ -65,7 +65,7 @@ jobs:
       - name: Create results directory
         run: mkdir -p $RESULTS
 
-      - name: Run tests and report to Allure TestOps
+      - name: Run tests and report to TestOps
         run: |
           allurectl watch -- mvn clean test -Dallure.results.directory=$RESULTS
 
