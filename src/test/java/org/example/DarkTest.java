@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Tags;
 public class DarkTest {
 
     @Test
-    @AllureId("2127")
     @DisplayName("Проверка переключения на темную тему")
     @Owner("Alex")
     @Features({
@@ -30,7 +29,7 @@ public class DarkTest {
     @Tags({
             @Tag("интерфейс"),
     })
-    public void testMethod() {
+    public void testMethod2() {
         Allure.label("tag", "интерфейс");
         Allure.label("Jira_Alex", "SCRUM-67");
         step("Зайти на портал");
