@@ -15,28 +15,3 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
 
 
-public class DarkTest {
-
-    @Test
-    @DisplayName("Проверка переключения на темную тему")
-    @Owner("Alex")
-    @Features({
-            @Feature("Интерфейс"),
-    })
-    @Stories({
-            @Story("Смена темы"),
-    })
-    @Tags({
-            @Tag("интерфейс"),
-    })
-    public void testMethod2() {
-        Allure.label("tag", "интерфейс");
-        Allure.label("Jira_Alex", "SCRUM-67");
-        step("Зайти на портал");
-        step("Перейти в меню пользователя");
-        step("Открыть настройки оформления");
-        step("Переключить тему оформления на темную");
-        step("Убедиться что интерфейс переключился на темную тему");
-    }
-
-}
